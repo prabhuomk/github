@@ -23,13 +23,13 @@ thead.setAttribute('class','thead-dark');
 
 var tr=document.createElement('tr');
 tr.style.backgroundColor="grey"
-var th1=document.createElement('td');
+var th1=document.createElement('th');
 th1.innerHTML="S.no";
-var th2=document.createElement('td');
+var th2=document.createElement('th');
 th2.innerHTML="ID";
-var th3=document.createElement('td');
+var th3=document.createElement('th');
 th3.innerHTML="Repository Name";
-var th4=document.createElement('td');
+var th4=document.createElement('th');
 th4.innerHTML="Repository url";
 tr.append(th1,th2,th3,th4);
 thead.append(tr);
@@ -78,12 +78,13 @@ document.body.append(table);
 
 var m=document.getElementById('myform1')
 m.addEventListener('submit',function(k){
-    k.preventDefault()
-    var search=document.getElementById('search1').value
+     k.preventDefault()
+    var search=document.getElementById('search').value
+    var search1=document.getElementById('search1').value
 
 
 
-    fetch("https://api.github.com/repos/"+search+"/commits",
+    fetch("https://api.github.com/repos/"+search+"/"+search1+"/commits",
     {
         headers:{
              "Accept": "application/vnd.github.v3+json",
@@ -103,17 +104,60 @@ m.addEventListener('submit',function(k){
 
 
 function ma(x){
-    var table=document.createElement('table');
-table.setAttribute('class','table1');
 
-var thead=document.createElement('thead');
-thead.setAttribute('class','thead-dark');
-thead.innerHTML=x;
-table.append( thead);
-document.body.append(table);
+console.log(x);
+fetch(x).then((res)=>{
+    return res.json()
+}).then((res1)=>{
+
+ 
+    var d=res1.tree;
+    var table1=document.createElement('table');
+ table1.setAttribute('class','table1');
+ var thead1=document.createElement('thead');
+ thead1.setAttribute('class','thead-dark');
+ var trx=document.createElement('tr');
+trx.style.backgroundColor="grey"
+var thx=document.createElement('th');
+thx.innerHTML="list of files of the repository";
+trx.append(thx);
+thead1.append(trx);
+var tbodyx=document.createElement('tbody');
+tbodyx.style.backgroundColor="pink"
+tbodyx.setAttribute('class','tbody-dark');
+
+table1.append( thead1,tbodyx);
+ document.body.append(table1);
+
+ 
+    
+    for(i=0;i<d.length;i++){
+        var e=d[i].path
+        tab(e);
+    }
+    
+    function tab(f)
+
+    {  
+        console.log(f)
+        var trw=document.createElement('tr');
+    var tdy=document.createElement('td');
+    tdy.innerHTML=f;
+    trw.append(tdy) ;
+    tbodyx.append(trw);
+    return;
+    
+    }
+    
+    
+}).catch((err)=>{
+    console.log(err);
+});
 
 
 }
+
+
 })
 
 
